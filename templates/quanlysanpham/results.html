@@ -1,0 +1,42 @@
+{% load humanize %}
+<style>
+    .id{
+        display: none;}
+</style>
+{% if results|length %}
+    <div class="tab">
+	<table class="table table-striped">
+	<tr>
+		<td colspan=3>
+		<strong>Có {{ results|length }} kết quả</strong>
+		</td>
+	</tr>
+		<td id="hinh"><strong>Hình ảnh</strong></td>
+		<td id="ten"><strong>Tên</strong></td>
+		<td id="ma"><strong>Mã </strong></td>
+		<td id="th"><strong>Thương hiệu</strong></td>
+		<td id="tonkho"><strong>Tồn kho</strong></td>
+		<td id="gia"><strong>Chưa VAT (-10%)</strong></td>
+            <td id="gia"><strong>Giá(+ VAT)</strong></td>
+	</tr>
+	{% for r in results %}
+	<tr>
+	    <td><img src="{{ r.hinh.url }}" style="width: 80px;height: 60px">
+                <br>
+                <a href="{{ r.hinh.url }}" download="{{ r.ten }}">Tải </a> | <a href="/admin/sanpham/sanpham/{{ r.id }}/change/">Sửa hình </a>
+            </td>
+		 <td id="ten" style="display: table-cell;width:240px;height: 80px;">{{ r.ten }}</td>
+		<td>{{ r.masp }}</td>
+		<td id="th"><p>{{ r.thuonghieusp }}</p></td>
+		<td id="tk">{{ r.soluong }}</td>
+        <td>{{ r.kovat|floatformat:"0"|intcomma }}</td>
+            <td>{{ r.giabanle|intcomma }}</td>
+	</tr>
+	{% endfor %}
+	</table>
+{% else %}
+	<div class="note">
+	Không có cái gì
+	</div>
+    </div>
+{% endif %}

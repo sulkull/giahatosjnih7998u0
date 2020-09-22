@@ -1,0 +1,89 @@
+{% extends "quanlysanpham/base.html" %}
+{% load humanize %}
+{% block extra_js %}
+
+<script type="text/javascript">
+$( document ).ready( function() {
+    $( '#q' ).keyup( function() {
+        q = $( '#q' ).val();
+        $( '#results' ).html( '&nbsp;' ).load( '{% url 'sanpham:search_th' th.id %}?q=' + q );
+    });
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<blink>
+   <marquee>
+      CÔNG TY TNHH TM VÀ DỊCH VỤ HATOK
+   </marquee>
+</blink>
+<style>
+a#thuong-hieu-{{ th.id }}{
+       font-weight: bold;
+    background: #e4ff02;
+}
+</style>
+
+
+<div class="form-signin">
+    {% include 'quanlysanpham/danhsach-thuonghieu.html' %}
+    <div class="thuonghieusp" style="display: flex;">
+        {% for d in thuonghieus %}
+            <a href="{% url 'sanpham:index_th' d.id %}" id="thuong-hieu-{{ d.id }}" style="margin-left: 5px;color: red;padding: 5px;border: 1px solid #c7c7c7;border-radius: 5px;">{{ d.ten }}</a>
+        {% endfor %}
+
+</div>
+    <h3 class="form-signin-heading">Kiểm Tra Giá<b style="color: #0044cc;"> {{ th.ten }}</b></h3>
+	<input id="q" type="text" placeholder="Nhập tên , mã sản phẩm,...." />
+    <br/>
+    <div class="margin">
+        <div id="results"></div>
+    </div>
+
+
+    <table class="table table-striped dis-s">
+       <tr id="sticks">
+           <td id="hinh"><strong>Hình ảnh</strong></td>
+            <td id="ten"><strong>Tên</strong></td>
+            <td id="ma"><strong>Mã </strong></td>
+            <td id="th"><strong>Thương hiệu</strong></td>
+            <td id="tonkho"><strong>Tồn kho</strong></td>
+            <td id="gia"><strong>Chưa VAT (-10%)</strong></td>
+            <td id="gias"><strong>Giá(+ VAT)</strong></td>
+        </tr>
+    </table>
+
+<div class="tab id">
+    <table class="table table-striped dis">
+        <tr id="stick">
+           <td id="hinh"><strong>Hình ảnh</strong></td>
+            <td id="ten"><strong>Tên</strong></td>
+            <td id="ma"><strong>Mã </strong></td>
+            <td id="th"><strong>Thương hiệu</strong></td>
+            <td id="tonkho"><strong>Tồn kho</strong></td>
+            <td id="gia"><strong>Chưa VAT (-10%)</strong></td>
+            <td id="gias"><strong>Giá(+ VAT)</strong></td>
+        </tr>
+        {% for r in th.sanpham_set.all %}
+        <tr>
+            <td id="hinh"><img src="{{ r.hinh.url }}" style="width: 80px;height: 60px">
+                <br>
+                <a href="{{ r.hinh.url }}" download="{{ r.ten }}">Tải </a> | <a href="/admin/sanpham/sanpham/{{ r.id }}/change/">Sửa hình </a>
+            </td>
+            <td id="ten" style="display: table-cell;width:240px;height: 80px;">{{ r.ten }}</td>
+            <td id="ma">{{ r.masp }}</td>
+            <td id="th"><p>{{ r.thuonghieusp }}</p></td>
+            <td id="tonkho">{{ r.soluong }}</td>
+            <td id="tonkho">{{ r.kovat|floatformat:"0"|intcomma }}</td>
+            <td id="gias">{{ r.giabanle|intcomma }}</td>
+
+        </tr>
+        {% endfor %}
+	</table>
+</div>
+</div>
+    </div>
+{% endblock %}
